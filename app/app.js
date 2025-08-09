@@ -1,5 +1,8 @@
+import { createBoard } from './utility/utility.js'
+
 async function main() {
-    console.log('Hello JS')
+    createBoard()
+    
 }
 
 main()
