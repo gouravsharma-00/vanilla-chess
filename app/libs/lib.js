@@ -5,7 +5,7 @@ function clearHighlights() {
     .forEach(el => el.classList.remove("highlight-move", "highlight-capture"));
 }
 
-export function legalMoves({type, position, color}) {
+export function legalMoves({type, position, color, piece}) {
     clearHighlights()
 
     const {move, capture} = moves[color][type]
@@ -20,6 +20,10 @@ export function legalMoves({type, position, color}) {
             const square = document.getElementById(`square-${canRow}-${canCol}`)
             if(!square.querySelector('img')) {
                 square.classList.add('highlight-move')
+            }else {
+                if(type == 'rook'|| type =='bishop' || type == 'queen') {
+                    return;
+                }
             }
         }
 

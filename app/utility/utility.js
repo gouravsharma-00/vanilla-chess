@@ -14,13 +14,13 @@ export function createBoard() {
             }
             grid.setAttribute('id', `square-${row}-${col}`)
 
-            grid.addEventListener('click', (e) =>{
+            grid.addEventListener('click', (e) => {
                 const position = e.target.getAttribute('data-position').split(',')
                 const type = e.target.getAttribute('data-type')
                 const color = e.target.getAttribute('data-color')
                 console.log(position, type, color)
 
-                legalMoves({type, position, color})
+                legalMoves({type, position, color, piece : e.target})
             })
             board.appendChild(grid)
         }
