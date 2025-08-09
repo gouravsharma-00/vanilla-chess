@@ -1,4 +1,5 @@
 import { pieces } from '../types/pieces.types.js'
+import {legalMoves} from '../libs/lib.js'
 
 export function createBoard() {
     const board = document.getElementById('board')
@@ -14,7 +15,12 @@ export function createBoard() {
             grid.setAttribute('id', `square-${row}-${col}`)
 
             grid.addEventListener('click', (e) =>{
-                console.log(e.target)
+                const position = e.target.getAttribute('data-position').split(',')
+                const type = e.target.getAttribute('data-type')
+                const color = e.target.getAttribute('data-color')
+                console.log(position, type, color)
+
+                legalMoves({type, position, color})
             })
             board.appendChild(grid)
         }
@@ -30,6 +36,10 @@ export function PlaceItems() {
             const img = document.createElement('img')
             img.src = piece.img
             img.alt = piece.type
+            img.setAttribute('data-position', piece.position)
+            img.setAttribute('data-type', piece.type)
+            img.setAttribute('data-color', color)
+            
             img.classList.add('pieces', `piece-${color}`)
 
             const [row, col] = piece.position

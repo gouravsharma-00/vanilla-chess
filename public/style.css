@@ -37,3 +37,6 @@
   object-fit: contain;
   cursor: pointer;
 }
+
+.highlight-move { background-color: lightgreen !important; border: 2px solid black }
+.highlight-capture { background-color: lightcoral !important; border: 2px solid black }
