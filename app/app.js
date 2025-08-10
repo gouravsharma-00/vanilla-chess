@@ -1,8 +1,7 @@
-import { createBoard } from './utility/utility.js'
+import { createBoard } from './libs/lib.js'
 
 async function main() {
     createBoard()
-    
 }
 
 main()

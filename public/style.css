@@ -16,19 +16,17 @@
 }
 
 .grid-black {
-
     background-color: black;
 }
 
 .grid-white {
-
     background-color: white;
 }
 #board {
     display: grid;
-    grid-template-columns: repeat(9, 60px);
-    grid-template-rows: repeat(9, 60px);
-    /* border: 2px solid black; */
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(8, 60px);
+    border: 2px solid black;
 }
 
 .pieces {
@@ -36,18 +34,7 @@
   height: 100%;
   object-fit: contain;
   cursor: pointer;
-  
 }
 
 .highlight-move { background-color: lightgreen !important; border: 2px solid black }
 .highlight-capture { background-color: lightcoral !important; border: 2px solid black }
-
-.grid-num {
-    display: flex;
-    justify-content: bottom;
-    align-items: end;
-}
-
-.grid-num > p {
-    display: inline
-}
