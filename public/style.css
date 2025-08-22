@@ -106,17 +106,19 @@ header {
     padding: 1rem;
 }
 
+/* header */
+
 #restart, #github, #rules {
     width: 30px;
     padding: 2px;
     background: none;
     border: none;
+    box-shadow: 2px 2px black;
+    border: 1px solid black;
 }
 
 #restart:hover, #github:hover, #rules:hover {
-
-    box-shadow: 5px 5px black;
-    border: 1px solid black;
+    box-shadow: 4px 4px black;
 }
 
    #rulesModal {

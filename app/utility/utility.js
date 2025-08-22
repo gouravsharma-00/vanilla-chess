@@ -256,6 +256,3 @@ document.getElementById('restart').addEventListener("click", () => {
     restartGame();
 })
 
-document.getElementById('rules').addEventListener("click", () => {
-    document.getElementById('rulesModal').showModal();
-})
