@@ -1,125 +1,257 @@
-let selected = null;
+import { isKingInCheck, isCheckmate, isKingCaptured  } from "./check.js";
+import Replay from "../libs/winner.js";
 
+let selected = null;
 let Turn = false; // false = 0 = white and true = 1 = black
 
 function select(img) {
-    if(!img) {
+    if (!img) {
         selected = null;
         removeAvailableSquares();
         return;
     }
+
+    // If a piece is already selected and user clicks another same-color piece → switch selection
+    if (selected && img.dataset.color === selected.color) {
+        removeAvailableSquares();
+    }
+
     selected = {
-            type: img.alt,
-            name: img.dataset.name,
-            position: img.dataset.position,
-            color: img.dataset.color,
-            row: img.dataset.row,
-            col: img.dataset.col
-        }
+        type: img.alt,
+        name: img.dataset.name,
+        position: img.dataset.position,
+        color: img.dataset.color,
+        row: img.dataset.row,
+        col: img.dataset.col
+    };
+
     getAvailableSquares(img);
 }
+
 export function getSquare(e) {
-    if((Turn && e.target.dataset.color !== "black") || (!Turn && e.target.dataset.color !== "white")) {
-        if(!selected) {
-            return
-        }
-        
+    // enforce turn system
+    if ((Turn && e.target.dataset.color !== "black") || (!Turn && e.target.dataset.color !== "white")) {
+        if (!selected) return;
     }
-    if(!selected) {
-        select(e.target)
 
-    }else {
-        if(isEnemyPiece(e.target)) {
-
-            
-            const square = document.getElementById(`square-${e.target.dataset.row}-${e.target.dataset.col}`)
-            const img = square.querySelector("img")
-
-            // capture the opponent
-            square.removeChild(img);
-            e.target.removeEventListener("click", getSquare);
-
-            // move the piece
-            const selectedSquare = document.getElementById(`square-${selected.row}-${selected.col}`)
-            const selectedImg = selectedSquare.querySelector("img")
-
-            selectedSquare.removeChild(selectedImg);
-
-            selectedImg.dataset.name = e.target.dataset.name
-            selectedImg.dataset.row = e.target.dataset.row
-            selectedImg.dataset.col = e.target.dataset.col
-            selectedImg.dataset.position = square.dataset.position
-
-            square.appendChild(selectedImg)
-
-
-
-            console.log(
-                `Moved ${selected.type} from ${selected.name} to ${e.target.dataset.name}`
-            )
-
-            select(null);
-
-
-        }else {
-            if(selected.color === e.target.dataset.color) {
-                select(e.target)
-            }else {
-                select(null)
+    if (!selected) {
+        select(e.target);
+    }  else {
+            // if clicked same color piece → reselect
+            if (selected.color === e.target.dataset.color) {
+                select(e.target);
             }
         }
-        Turn = !Turn
 
-    }
 
-    console.log(Turn)
+    // console.log(Turn); // turn
 }
 
 function getAvailableSquares(img) {
     removeAvailableSquares();
 
-    const currentRow = Number(img.dataset.row);
-    const currentCol = Number(img.dataset.col);
-    if(img.dataset.color === "white") {
-    for(let i = 1; i < 3; i++) {
-        const square = document.getElementById(`square-${currentRow + i}-${currentCol}`);
-        if(!square.querySelector('img')) {
-            square.classList.add("available")
-        }else {
-            return
-        }
-    }
-    }else {
-    for(let i = 1; i < 3; i++) {
-        const square = document.getElementById(`square-${currentRow - i}-${currentCol}`);
-        if(!square.querySelector('img')) {
-            square.classList.add("available")
-        }else {
-            return
-        }
-    }
+    const type = img.alt;
+    const color = img.dataset.color;
+    const row = Number(img.dataset.row);
+    const col = Number(img.dataset.col);
+
+    let moves = [];
+
+    switch (type) {
+        case "pawn": moves = getPawnMoves(row, col, color); break;
+        case "rook": moves = getRookMoves(row, col, color); break;
+        case "knight": moves = getKnightMoves(row, col, color); break;
+        case "bishop": moves = getBishopMoves(row, col, color); break;
+        case "queen": moves = getQueenMoves(row, col, color); break;
+        case "king": moves = getKingMoves(row, col, color); break;
     }
 
-}
+    // highlight legal moves
+    moves.forEach(([r, c]) => {
+        if (r >= 0 && r < 8 && c >= 0 && c < 8) {
+            const square = document.getElementById(`square-${r}-${c}`);
+            if (!square) return;
 
-function removeAvailableSquares() {
-    const availableSquares = document.querySelectorAll(".available");
-    availableSquares.forEach(square => {
-        square.classList.remove("available");
+            const occupant = square.querySelector("img");
+            if (!occupant) {
+                square.classList.add("available"); // empty square
+                square.addEventListener("click", moveSelectedPiece);
+            } else if (occupant.dataset.color !== color) {
+                square.classList.add("highlight-capture"); // enemy piece
+                square.addEventListener("click", moveSelectedPiece);
+            }
+        }
     });
 }
 
-function isEnemyPiece(img) {
-    if(!selected || !img) {
-        console.error("selected or img is null/undefined")
-        return false;
-    }
-    if(img.dataset.color !== selected.color){
-        return true;
+function moveSelectedPiece(e) {
+    const square = e.currentTarget;
+    const [r, c] = square.dataset.position.split(",").map(Number);
+
+    const selectedSquare = document.getElementById(`square-${selected.row}-${selected.col}`);
+    const selectedImg = selectedSquare.querySelector("img");
+
+    // remove captured piece
+    const targetImg = square.querySelector("img");
+    if (targetImg) targetImg.remove();
+
+    // move piece
+    selectedSquare.removeChild(selectedImg);
+    selectedImg.dataset.row = r;
+    selectedImg.dataset.col = c;
+    square.appendChild(selectedImg);
+    
+
+    console.log(`Moved ${selected.type} from ${selected.name} to ${square.dataset.name}`);
+    selectedImg.dataset.name = square.dataset.name
+
+    removeAvailableSquares();
+    select(null);
+    Turn = !Turn;
+    // check and mate
+     const currentColor = Turn ? "black" : "white";
+
+    // === check for check or checkmate ===
+    const { inCheck, attackers } = isKingInCheck(currentColor);
+
+    if (inCheck) {
+        console.log(`${currentColor} king is in CHECK by:`);
+        console.log(attackers)
+        attackers.forEach(a => {
+            console.log(`- ${a.type} from ${a.name}`);
+        });
+
+        if (isCheckmate(currentColor)) {
+            console.log(`CHECKMATE! ${currentColor} has no legal moves.`);
+            pauseGame(); // remove listeners
+            Replay(Turn ? "White" : "Black", restartGame);
+        }
     }
 
-    return false;
+    // === check if a king got captured ===
+    const { captured, winner } = isKingCaptured();
+    if (captured) {
+        console.log(`GAME OVER — ${winner} wins by capturing the king!`);
+        pauseGame(); // remove listeners
+        Replay(winner, restartGame);
+    }
+}
+
+function removeAvailableSquares() {
+    const availableSquares = document.querySelectorAll(".available, .highlight-capture");
+    availableSquares.forEach(square => {
+        square.classList.remove("available", "highlight-capture");
+        square.removeEventListener("click", moveSelectedPiece);
+    });
+}
+
+// === Piece move generators (same as before) ===
+function getPawnMoves(row, col, color) {
+    const dir = color === "white" ? 1 : -1;
+    let moves = [];
+
+    // forward move
+    let nextRow = row + dir;
+    if (isEmpty(nextRow, col)) {
+        moves.push([nextRow, col]);
+
+        // double move from start
+        if ((color === "white" && row === 1) || (color === "black" && row === 6)) {
+            if (isEmpty(row + 2 * dir, col)) moves.push([row + 2 * dir, col]);
+        }
+    }
+
+    // captures
+    [[nextRow, col - 1], [nextRow, col + 1]].forEach(([r, c]) => {
+        if (isEnemy(r, c, color)) moves.push([r, c]);
+    });
+
+    return moves;
+}
+
+function getRookMoves(row, col, color) {
+    return getSlidingMoves(row, col, color, [[1,0],[-1,0],[0,1],[0,-1]]);
+}
+
+function getBishopMoves(row, col, color) {
+    return getSlidingMoves(row, col, color, [[1,1],[1,-1],[-1,1],[-1,-1]]);
+}
+
+function getQueenMoves(row, col, color) {
+    return [
+        ...getRookMoves(row, col, color),
+        ...getBishopMoves(row, col, color)
+    ];
+}
+
+function getKnightMoves(row, col, color) {
+    const offsets = [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]];
+    return offsets.filter(([dr, dc]) => isOnBoard(row+dr, col+dc) && !isAlly(row+dr, col+dc, color))
+                  .map(([dr, dc]) => [row+dr, col+dc]);
+}
+
+function getKingMoves(row, col, color) {
+    const offsets = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+    return offsets.filter(([dr, dc]) => isOnBoard(row+dr, col+dc) && !isAlly(row+dr, col+dc, color))
+                  .map(([dr, dc]) => [row+dr, col+dc]);
+}
+
+// sliding pieces helper
+function getSlidingMoves(row, col, color, directions) {
+    let moves = [];
+    directions.forEach(([dr, dc]) => {
+        let r = row + dr, c = col + dc;
+        while (isOnBoard(r,c)) {
+            if (isEmpty(r,c)) {
+                moves.push([r,c]);
+            } else {
+                if (isEnemy(r,c,color)) moves.push([r,c]);
+                break;
+            }
+            r += dr; c += dc;
+        }
+    });
+    return moves;
+}
+
+// helpers
+function isOnBoard(r, c) {
+    return r >= 0 && r < 8 && c >= 0 && c < 8;
+}
+function isEmpty(r, c) {
+    const sq = document.getElementById(`square-${r}-${c}`);
+    return sq && !sq.querySelector("img");
+}
+function isEnemy(r, c, color) {
+    const sq = document.getElementById(`square-${r}-${c}`);
+    const piece = sq?.querySelector("img");
+    return piece && piece.dataset.color !== color;
+}
+function isAlly(r, c, color) {
+    const sq = document.getElementById(`square-${r}-${c}`);
+    const piece = sq?.querySelector("img");
+    return piece && piece.dataset.color === color;
+}
+
+function isEnemyPiece(img) {
+    if (!selected || !img) return false;
+    return img.dataset.color !== selected.color;
 }
 
 
 
+function pauseGame() {
+    const squares = document.querySelectorAll(".square");
+    squares.forEach(sq => {
+        const clone = sq.cloneNode(true);
+        sq.parentNode.replaceChild(clone, sq); // removes all listeners
+    });
+}
+
+function restartGame() {
+    window.location.reload(); // simplest reset
+}
+
+document.getElementById('restart').addEventListener("click", () => {
+    restartGame()
+})
