@@ -1,3 +1,17 @@
+import {
+    getPawnMoves, 
+    isAlly, 
+    isEnemy, 
+    isEmpty, 
+    isOnBoard, 
+    getSlidingMoves, 
+    getKingMoves, 
+    getKnightMoves, 
+    getQueenMoves, 
+    getBishopMoves, 
+    getRookMoves, 
+} from './utility.js'
+
 // chessCheck.js
 export function isKingInCheck(color) {
     const kingSquare = findKing(color);
@@ -95,99 +109,6 @@ function simulateMove(piece, r, c) {
     if (targetImg) endSquare.appendChild(targetImg);
 
     return !inCheck;
-}
-
-// === Piece move generators (same as before) ===
-function getPawnMoves(row, col, color) {
-    const dir = color === "white" ? 1 : -1;
-    let moves = [];
-
-    // forward move
-    let nextRow = row + dir;
-    if (isEmpty(nextRow, col)) {
-        moves.push([nextRow, col]);
-
-        // double move from start
-        if ((color === "white" && row === 1) || (color === "black" && row === 6)) {
-            if (isEmpty(row + 2 * dir, col)) moves.push([row + 2 * dir, col]);
-        }
-    }
-
-    // captures
-    [[nextRow, col - 1], [nextRow, col + 1]].forEach(([r, c]) => {
-        if (isEnemy(r, c, color)) moves.push([r, c]);
-    });
-
-    return moves;
-}
-
-function getRookMoves(row, col, color) {
-    return getSlidingMoves(row, col, color, [[1,0],[-1,0],[0,1],[0,-1]]);
-}
-
-function getBishopMoves(row, col, color) {
-    return getSlidingMoves(row, col, color, [[1,1],[1,-1],[-1,1],[-1,-1]]);
-}
-
-function getQueenMoves(row, col, color) {
-    return [
-        ...getRookMoves(row, col, color),
-        ...getBishopMoves(row, col, color)
-    ];
-}
-
-function getKnightMoves(row, col, color) {
-    const offsets = [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]];
-    return offsets.filter(([dr, dc]) => isOnBoard(row+dr, col+dc) && !isAlly(row+dr, col+dc, color))
-                  .map(([dr, dc]) => [row+dr, col+dc]);
-}
-
-function getKingMoves(row, col, color) {
-    const offsets = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
-    return offsets.filter(([dr, dc]) => isOnBoard(row+dr, col+dc) && !isAlly(row+dr, col+dc, color))
-                  .map(([dr, dc]) => [row+dr, col+dc]);
-}
-
-// sliding pieces helper
-function getSlidingMoves(row, col, color, directions) {
-    let moves = [];
-    directions.forEach(([dr, dc]) => {
-        let r = row + dr, c = col + dc;
-        while (isOnBoard(r,c)) {
-            if (isEmpty(r,c)) {
-                moves.push([r,c]);
-            } else {
-                if (isEnemy(r,c,color)) moves.push([r,c]);
-                break;
-            }
-            r += dr; c += dc;
-        }
-    });
-    return moves;
-}
-
-// helpers
-function isOnBoard(r, c) {
-    return r >= 0 && r < 8 && c >= 0 && c < 8;
-}
-function isEmpty(r, c) {
-    const sq = document.getElementById(`square-${r}-${c}`);
-    return sq && !sq.querySelector("img");
-}
-function isEnemy(r, c, color) {
-    const sq = document.getElementById(`square-${r}-${c}`);
-    const piece = sq?.querySelector("img");
-    return piece && piece.dataset.color !== color;
-}
-function isAlly(r, c, color) {
-    const sq = document.getElementById(`square-${r}-${c}`);
-    const piece = sq?.querySelector("img");
-    return piece && piece.dataset.color === color;
-}
-
-function isEnemyPiece(img) {
-    if (!selected || !img) return false;
-    return img.dataset.color !== selected.color;
 }
 
 export function isKingCaptured() {

@@ -1,5 +1,5 @@
 import { isKingInCheck, isCheckmate, isKingCaptured  } from "./check.js";
-import Replay from "../libs/winner.js";
+import Replay from "./winner.js";
 
 let selected = null;
 let Turn = false; // false = 0 = white and true = 1 = black
@@ -146,7 +146,7 @@ function removeAvailableSquares() {
 }
 
 // === Piece move generators (same as before) ===
-function getPawnMoves(row, col, color) {
+export function getPawnMoves(row, col, color) {
     const dir = color === "white" ? 1 : -1;
     let moves = [];
 
@@ -169,35 +169,35 @@ function getPawnMoves(row, col, color) {
     return moves;
 }
 
-function getRookMoves(row, col, color) {
+export function getRookMoves(row, col, color) {
     return getSlidingMoves(row, col, color, [[1,0],[-1,0],[0,1],[0,-1]]);
 }
 
-function getBishopMoves(row, col, color) {
+export function getBishopMoves(row, col, color) {
     return getSlidingMoves(row, col, color, [[1,1],[1,-1],[-1,1],[-1,-1]]);
 }
 
-function getQueenMoves(row, col, color) {
+export function getQueenMoves(row, col, color) {
     return [
         ...getRookMoves(row, col, color),
         ...getBishopMoves(row, col, color)
     ];
 }
 
-function getKnightMoves(row, col, color) {
+export function getKnightMoves(row, col, color) {
     const offsets = [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]];
     return offsets.filter(([dr, dc]) => isOnBoard(row+dr, col+dc) && !isAlly(row+dr, col+dc, color))
                   .map(([dr, dc]) => [row+dr, col+dc]);
 }
 
-function getKingMoves(row, col, color) {
+export function getKingMoves(row, col, color) {
     const offsets = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
     return offsets.filter(([dr, dc]) => isOnBoard(row+dr, col+dc) && !isAlly(row+dr, col+dc, color))
                   .map(([dr, dc]) => [row+dr, col+dc]);
 }
 
 // sliding pieces helper
-function getSlidingMoves(row, col, color, directions) {
+export function getSlidingMoves(row, col, color, directions) {
     let moves = [];
     directions.forEach(([dr, dc]) => {
         let r = row + dr, c = col + dc;
@@ -215,19 +215,19 @@ function getSlidingMoves(row, col, color, directions) {
 }
 
 // helpers
-function isOnBoard(r, c) {
+export function isOnBoard(r, c) {
     return r >= 0 && r < 8 && c >= 0 && c < 8;
 }
-function isEmpty(r, c) {
+export function isEmpty(r, c) {
     const sq = document.getElementById(`square-${r}-${c}`);
     return sq && !sq.querySelector("img");
 }
-function isEnemy(r, c, color) {
+export function isEnemy(r, c, color) {
     const sq = document.getElementById(`square-${r}-${c}`);
     const piece = sq?.querySelector("img");
     return piece && piece.dataset.color !== color;
 }
-function isAlly(r, c, color) {
+export function isAlly(r, c, color) {
     const sq = document.getElementById(`square-${r}-${c}`);
     const piece = sq?.querySelector("img");
     return piece && piece.dataset.color === color;
@@ -240,7 +240,7 @@ function isEnemyPiece(img) {
 
 
 
-function pauseGame() {
+export function pauseGame() {
     const squares = document.querySelectorAll(".square");
     squares.forEach(sq => {
         const clone = sq.cloneNode(true);
@@ -248,10 +248,14 @@ function pauseGame() {
     });
 }
 
-function restartGame() {
+export function restartGame() {
     window.location.reload(); // simplest reset
 }
 
 document.getElementById('restart').addEventListener("click", () => {
-    restartGame()
+    restartGame();
+})
+
+document.getElementById('rules').addEventListener("click", () => {
+    document.getElementById('rulesModal').showModal();
 })
