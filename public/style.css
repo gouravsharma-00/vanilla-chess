@@ -121,45 +121,78 @@ header {
     box-shadow: 4px 4px black;
 }
 
-   #rulesModal {
-    margin: auto;
-        border: 2px solid #ccc;
-        border-radius: 8px;
-        padding: 20px;
-        background-color: #f9f9f9;
-        max-width: 600px;
-    }
+#rulesModal {
+margin: auto;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    max-width: 600px;
+}
 
-    #rulesModal h2 {
-        text-align: center;
-        color: #333;
-    }
+#rulesModal h2 {
+    text-align: center;
+    color: #333;
+}
 
-    #rulesModal h3 {
-        color: #555;
-    }
+#rulesModal h3 {
+    color: #555;
+}
 
-    #rulesModal ul {
-        list-style-type: none;
-        padding: 0;
-    }
+#rulesModal ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-    #rulesModal li {
-        margin-bottom: 15px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 10px;
-    }
+#rulesModal li {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
 
-    #rulesModal button {
-        display: block;
-        margin: 20px auto 0;
-        padding: 10px 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        cursor: pointer;
-        background-color: #ddd;
-    }
+#rulesModal button {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ddd;
+}
 
-    #rulesModal::backdrop {
-        background-color: rgba(0, 0, 0, 0.5);
-    }
+#rulesModal::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* power ups */
+
+#black-power {
+    position: absolute;
+    top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#white-power {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#black-shield, #white-shield {
+    width: 30px;
+    padding: 2px;
+    background: none;
+    border: none;
+    box-shadow: 2px 2px black;
+    border: 1px solid black;
+}
+
+#black-shield:hover, #white-shield:hover {
+    box-shadow: 4px 4px black;
+}
