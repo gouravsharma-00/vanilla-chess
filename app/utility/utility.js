@@ -1,5 +1,8 @@
 import { isKingInCheck, isCheckmate, isKingCaptured  } from "./check.js";
 import Replay from "./winner.js";
+import Power from './power.js';
+
+const P = new Power();
 
 let selected = null;
 let Turn = false; // false = 0 = white and true = 1 = black
@@ -85,6 +88,7 @@ function getAvailableSquares(img) {
 }
 
 function moveSelectedPiece(e) {
+
     const square = e.currentTarget;
     const [r, c] = square.dataset.position.split(",").map(Number);
 
@@ -93,7 +97,14 @@ function moveSelectedPiece(e) {
 
     // remove captured piece
     const targetImg = square.querySelector("img");
-    if (targetImg) targetImg.remove();
+    if (targetImg) {
+        if(selected.color == 'black' && P.activeshieldwhite) {
+            return;
+        }else if(P.activeshieldblack) {
+            return;
+        }
+        targetImg.remove()
+    };
 
     // move piece
     selectedSquare.removeChild(selectedImg);
@@ -105,6 +116,8 @@ function moveSelectedPiece(e) {
     console.log(`Moved ${selected.type} from ${selected.name} to ${square.dataset.name}`);
     selectedImg.dataset.name = square.dataset.name
 
+    selected.color == 'black' ? P.expireShield('black') : P.expireShield('white');
+    
     removeAvailableSquares();
     select(null);
     Turn = !Turn;
@@ -135,6 +148,7 @@ function moveSelectedPiece(e) {
         pauseGame(); // remove listeners
         Replay(winner, restartGame);
     }
+
 }
 
 function removeAvailableSquares() {
@@ -256,3 +270,14 @@ document.getElementById('restart').addEventListener("click", () => {
     restartGame();
 })
 
+// power
+document.getElementById('black-shield').addEventListener('click', () => {
+    P.useShield('black');
+    console.log("Shield Activated for Black")
+})
+
+document.getElementById('white-power').addEventListener('click', () => {
+    P.useShield('white');
+    console.log("Shield Activated for white")
+
+})
