@@ -160,7 +160,6 @@ function moveSelectedPiece(e) {
     selectedImg.dataset.name = square.dataset.name
 
     selected.color == 'black' ? P.expireShield('white') : P.expireShield('black');
-    selected.color == 'black' ? shield.deactive('white') : shield.deactive('black');
     
     removeAvailableSquares();
     select(null);
@@ -350,11 +349,11 @@ whiteshield.addEventListener('click', () => {
 const shield = {
     active : (color) => {
         if(color == 'black') {
-            blackshield.style.backgroundColor = 'red';
+            blackshield.style.backgroundColor = 'gray';
             return;
         }
 
-        whiteshield.style.backgroundColor = 'red'
+        whiteshield.style.backgroundColor = 'gray'
 
     },
 
@@ -392,11 +391,11 @@ whiteskip.addEventListener('click', () => {
 const skip = {
     active: (color) => {
         if(color == 'black') {
-            blackskip.style.backgroundColor = 'red';
+            blackskip.style.backgroundColor = 'gray';
             return;
         }
 
-        whiteskip.style.backgroundColor = 'red'
+        whiteskip.style.backgroundColor = 'gray'
 
     },
 
@@ -433,11 +432,11 @@ whitenuke.addEventListener('click', () => {
 const nuke = {
     active : (color) => {
         if(color == 'black') {
-            blacknuke.style.backgroundColor = 'red';
+            blacknuke.style.backgroundColor = 'gray';
             return;
         }
 
-        whitenuke.style.backgroundColor = 'red'
+        whitenuke.style.backgroundColor = 'gray'
 
     },
 
