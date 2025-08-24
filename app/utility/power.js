@@ -9,13 +9,18 @@ export default class Power {
         // skip
         this.blackSkip = true;
         this.whiteSkip = true;
-
+        // nuke
+        this.blacknuke = true;
+        this.whitenuke = true;
         // shield
         this.activeshieldwhite = null;
         this.activeshieldblack = null;
         // skip
         this.activeskipwhite = null;
         this.activeskipblack = null;
+        // nuke
+        this.activenukewhite = null;
+        this.activenukeblack = null;
         
     }
 
@@ -54,5 +59,23 @@ export default class Power {
         }
 
         this.activeskipwhite = null;
+    }
+
+    useNuke(color) {
+        if(color == 'black' && this.blacknuke) {
+            this.activenukeblack = true;
+            this.blacknuke = false;
+        }else if(this.whitenuke) {
+            this.activenukewhite = true;
+            this.whitenuke = false;
+        }
+    }
+
+    expireNuke(color) {
+        if(color == 'black') {
+            this.activenukeblack = null;
+        }
+
+        this.activenukewhite = null;
     }
 }

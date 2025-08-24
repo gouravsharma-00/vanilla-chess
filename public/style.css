@@ -188,7 +188,7 @@ margin: auto;
     gap: 0.5rem;
 }
 
-#black-shield, #white-shield, #black-skip, #white-skip {
+#black-shield, #white-shield, #black-skip, #white-skip, #white-nuke, #black-nuke {
     width: 30px;
     padding: 2px;
     background: none;
@@ -197,6 +197,6 @@ margin: auto;
     border: 1px solid black;
 }
 
-#black-shield:hover, #white-shield:hover, #black-skip:hover, #white-skip:hover {
+#black-shield:hover, #white-shield:hover, #black-skip:hover, #white-skip:hover, #white-nuke:hover, #black-nuke:hover {
     box-shadow: 4px 4px black;
 }

@@ -1,6 +1,7 @@
 import { isKingInCheck, isCheckmate, isKingCaptured  } from "./check.js";
 import Replay from "./winner.js";
 import Power from './power.js';
+import { PlaySound } from "./sound.js";
 
 const P = new Power();
 
@@ -32,6 +33,48 @@ function select(img) {
 }
 
 export function getSquare(e) {
+    if(e.target.alt == 'pawn' && (P.activenukeblack || P.activenukewhite)) {
+        if(e.target.dataset.color == 'black' && P.activenukewhite) {
+            const targetImg = e.target
+            const [r, c] = targetImg.dataset.position.split(",").map(Number);
+            const square = document.getElementById(`square-${r}-${c}`);
+            if (targetImg) {
+                targetImg.remove()
+                PlaySound('nuke');
+                const img = document.createElement('img')
+                img.classList.add('pieces')
+                img.src = './public/images/assets/nuke.png';
+                img.alt = 'nuke'
+                square.appendChild(img)
+                setTimeout(() => {
+                    img.remove();
+                }, 500)
+                P.expireNuke('white')
+            };
+            console.log(`White nuked blacked pawn at ${e.target.dataset.name}`)
+            return;
+
+        }else if(e.target.dataset.color == 'white' && P.activenukeblack) {
+            const targetImg = e.target;
+            const [r, c] = targetImg.dataset.position.split(",").map(Number);
+            const square = document.getElementById(`square-${r}-${c}`);
+            if(targetImg) {
+                targetImg.remove();
+                PlaySound('nuke');
+                const img = document.createElement('img')
+                img.classList.add('pieces')
+                img.src = './public/images/assets/nuke.png';
+                img.alt = 'nuke'
+                square.appendChild(img)
+                setTimeout(() => {
+                    img.remove();
+                }, 500)
+                P.expireNuke('black')
+            }
+            console.log(`Black nuked white pawn at ${e.target.dataset.name}`)
+            return;
+        }
+    }
     // enforce turn system
     if ((Turn && e.target.dataset.color !== "black") || (!Turn && e.target.dataset.color !== "white")) {
         if (!selected) return;
@@ -365,5 +408,45 @@ const skip = {
 
         whiteskip.style.backgroundColor = 'white'
 
+    }
+}
+
+// nuke
+
+const blacknuke = document.getElementById('black-nuke')
+blacknuke.addEventListener('click', () => {
+    P.useNuke('black')
+    if(P.activenukeblack) {
+        nuke.active('black');
+        console.log('Black is nuking white')
+    }
+})
+const whitenuke = document.getElementById('white-nuke')
+whitenuke.addEventListener('click', () => {
+    P.useNuke('white')
+    if(P.activenukewhite) {
+        nuke.active('white');
+        console.log('white is nuking black')
+    }
+})
+
+const nuke = {
+    active : (color) => {
+        if(color == 'black') {
+            blacknuke.style.backgroundColor = 'red';
+            return;
+        }
+
+        whitenuke.style.backgroundColor = 'red'
+
+    },
+
+    deactive: (color) => {
+        if(color == 'black') {
+            blacknuke.style.backgroundColor = 'white';
+            return;
+        }
+
+        whitenuke.style.backgroundColor = 'white'
     }
 }
