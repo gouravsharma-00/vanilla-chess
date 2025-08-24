@@ -116,7 +116,8 @@ function moveSelectedPiece(e) {
     console.log(`Moved ${selected.type} from ${selected.name} to ${square.dataset.name}`);
     selectedImg.dataset.name = square.dataset.name
 
-    selected.color == 'black' ? P.expireShield('black') : P.expireShield('white');
+    selected.color == 'black' ? P.expireShield('white') : P.expireShield('black');
+    selected.color == 'black' ? shield.deactive('white') : shield.deactive('black');
     
     removeAvailableSquares();
     select(null);
@@ -147,6 +148,15 @@ function moveSelectedPiece(e) {
         console.log(`GAME OVER — ${winner} wins by capturing the king!`);
         pauseGame(); // remove listeners
         Replay(winner, restartGame);
+    }
+    // P.activeskipblack ? skip.deactive('black') :skip.deactive('white');
+
+    if(P.activeskipblack && !Turn) { // skip white
+        Turn = !Turn
+        P.expireSkip('black')
+    }else if(P.activeskipwhite && Turn){ // skip black
+        Turn = !Turn;
+        P.expireSkip('white')
     }
 
 }
@@ -271,13 +281,89 @@ document.getElementById('restart').addEventListener("click", () => {
 })
 
 // power
-document.getElementById('black-shield').addEventListener('click', () => {
+// shield
+const blackshield = document.getElementById('black-shield')
+blackshield.addEventListener('click', () => {
     P.useShield('black');
-    console.log("Shield Activated for Black")
+    if(P.activeshieldblack) {
+        shield.active('black')
+        console.log("Shield Activated for Black")
+    }
+    
 })
 
-document.getElementById('white-power').addEventListener('click', () => {
+const whiteshield = document.getElementById('white-shield')
+whiteshield.addEventListener('click', () => {
     P.useShield('white');
-    console.log("Shield Activated for white")
+    if(P.activeshieldwhite) {
+        shield.active('white')
+        console.log("Shield Activated for white")
+    }
+    
 
 })
+
+
+const shield = {
+    active : (color) => {
+        if(color == 'black') {
+            blackshield.style.backgroundColor = 'red';
+            return;
+        }
+
+        whiteshield.style.backgroundColor = 'red'
+
+    },
+
+    deactive : (color) => {
+        if(color == 'black') {
+            blackshield.style.backgroundColor = 'white';
+            return;
+        }
+
+        whiteshield.style.backgroundColor = 'white'
+    }
+}
+
+// skip
+const blackskip = document.getElementById('black-skip')
+blackskip.addEventListener('click', () => {
+    P.useSkip('black');
+    if(P.activeskipblack) {
+        skip.active('black')
+        console.log("skip Activated for Black i.e white turn will be skipped")
+    }
+    
+})
+
+const whiteskip = document.getElementById('white-skip')
+whiteskip.addEventListener('click', () => {
+    P.useSkip('white');
+    if(P.activeskipwhite) {
+        skip.active('white')
+        console.log("skip Activated for white i.e black turn will be skipped")
+    }
+    
+
+})
+const skip = {
+    active: (color) => {
+        if(color == 'black') {
+            blackskip.style.backgroundColor = 'red';
+            return;
+        }
+
+        whiteskip.style.backgroundColor = 'red'
+
+    },
+
+    deactive: (color) => {
+        if(color == 'black') {
+            blackskip.style.backgroundColor = 'white';
+            return;
+        }
+
+        whiteskip.style.backgroundColor = 'white'
+
+    }
+}
