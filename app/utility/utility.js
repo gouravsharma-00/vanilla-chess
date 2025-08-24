@@ -162,6 +162,7 @@ function moveSelectedPiece(e) {
     selectedSquare.removeChild(selectedImg);
     selectedImg.dataset.row = r;
     selectedImg.dataset.col = c;
+    selectedImg.dataset.position = [r, c]
     square.appendChild(selectedImg);
     
 
