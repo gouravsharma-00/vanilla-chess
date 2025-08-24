@@ -1,71 +1,79 @@
-# ♟️ Vanilla-Chess
+# ♟️ Vanilla-Chess  
 
-A simple yet powerful chess game built entirely with **vanilla HTML, CSS, and JavaScript**.  
-Play against a **friend locally** or challenge the mighty **Stockfish chess engine** directly in your browser.  
+A fun and creative twist on the classic game of chess — built entirely with **vanilla HTML, CSS, and JavaScript**.  
+Play with a **friend** and unleash **power-ups** to make every match unpredictable ⚡🔥.  
+
+![screenshot1](/public/images/assets/screenshots/vanilla-chess%20(3).gif)
+---
+
+## 🚀 About the Project  
+
+Vanilla-Chess started as a simple idea: *make chess fun, fresh, and exciting* 🎉.  
+Classic chess can be intense and strategic, but what if we added a bit of chaos? That’s where **power-ups** come in.  
+
+✨ **Features:**  
+- 👥 **Human vs Human** – play with a friend (on the same device).  
+- ⚡ **Power-Ups Mode** – activate special abilities that can turn the tide of the game.  
+- 🎨 **Clean & Minimal UI** – a modern chessboard design.  
+- ✅ **Rules Enforced** – turn-based play, legal moves, and captures.  
+- 🔮 **Creative Gameplay** – because chess should be *brainy and fun*!  
+
+🛠 **How it’s built:**  
+- 🏗 **HTML** – board structure, controls, and layout.  
+- 🎨 **CSS** – styling, animations, and chess piece design.  
+- ⚡ **JavaScript (ES6+)** – move validation, turn management, power-up logic, and gameplay flow.  
 
 ---
 
-## 🚀 About the Project
+## 🌐 Live Demo  
 
-Vanilla-Chess is my submission for the **🌱 CodeSprout Hackathon – August 2025 Edition**.  
-The challenge was to build something fun using **only vanilla web technologies** — no frameworks, just raw HTML, CSS, and JS.  
-
-**What it does:**  
-- Lets you play chess with another human (on the same device).  
-- Offers a mode to play against **Stockfish**, a world-class open-source chess engine.  
-- Renders a clean, minimal chessboard UI.  
-- Enforces legal moves, turn-based play, and piece captures.  
-
-**How I built it:**  
-- **HTML** for structure (chessboard, controls, and layout).  
-- **CSS** for styling the board, pieces, and animations.  
-- **JavaScript** for all the game logic — move validation, turn switching, Stockfish integration, and gameplay flow.  
+🚀 Try it out now → [**Play Vanilla-Chess**](https://gouravsharma-00.github.io/vanilla-chess/)  
 
 ---
 
-## 🌐 Live Demo
+## 💻 GitHub Repository  
 
-🔗 [Play Vanilla-Chess here!](#) <!-- replace with your deployed link -->
-
----
-
-## 💻 GitHub Repository
-
-📂 [View the Code on GitHub](#) <!-- replace with your repo link -->
+📂 Check the code → [**View on GitHub**](https://github.com/gouravsharma-00/vanilla-chess)  
 
 ---
 
-## 📸 Screenshots / GIFs  
+## 📸 Screenshots  
 
-| Human vs Human | Human vs Stockfish |
-|----------------|--------------------|
-| ![screenshot1](#) | ![screenshot2](#) |
-
----
-
-## 🎥 Demo Video  
-
-▶️ [Watch the Demo Video](#) <!-- replace with your demo video link -->
+| 👥 Human vs Human | ⚡ Chess with Power-Ups |
+|------------------|-------------------------|
+| ![screenshot1](/public/images/assets/screenshots/vanilla-chess%20(1).png) | ![screenshot2](/public/images/assets/screenshots/vanilla-chess%20(2).png) |
 
 ---
 
-## 🛠️ Tech Stack
+## 🎥 Watch Me Build it  
 
-- **HTML5**
-- **CSS3**
-- **JavaScript (ES6+)**
-- **Stockfish (WebAssembly version)**
+▶️ Watch it in action:  
 
----
-
-## 📜 Challenge Info
-
-This project was built for the **🌱 CodeSprout Hackathon – August 2025 Edition**, a beginner-focused, month-long online coding event for students and first-time developers.  
-The rules: **vanilla web only** — no frameworks, just creativity and code.  
+[![Vanilla Chess](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)  
+*Click to play on YouTube* 🎬  
 
 ---
 
-## 🤝 Acknowledgments
+## 🛠️ Tech Stack  
 
-- **Stockfish Chess Engine** for powering AI mode.  
-- **CodeSprout Hackathon Team** for organizing this beginner-friendly event.  
+- 🏗 **HTML5**  
+- 🎨 **CSS3**  
+- ⚡ **JavaScript (ES6+)**  
+
+---
+
+## ✨ Future Ideas  
+
+- 🎮 More crazy power-ups!  
+- 🌍 Online multiplayer support.  
+- 📱 Mobile-friendly UI.  
+- 🧩 Different chessboard themes & skins.  
+
+---
+
+## 💡 Inspiration  
+
+Chess is timeless, but who says it can’t be wild?  
+This project reimagines chess with **super-powers** to make each game unpredictable, hilarious, and full of surprises ⚡♟️🔥.  
+
+---
