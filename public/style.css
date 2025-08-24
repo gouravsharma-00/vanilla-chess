@@ -11,8 +11,8 @@
     overflow: hidden;
     display: flex;
     justify-content: center;
+    flex-direction: row;
     align-items: center;
-    flex-direction: column;
 }
 
 .grid-black {
@@ -43,7 +43,7 @@
 }
 #board {
     display: grid;
-    position: absolute;
+    /* position: absolute; */
     grid-template-columns: repeat(8, 60px);
     grid-template-rows: repeat(8, 60px);
     border: 2px solid black;
@@ -74,28 +74,65 @@
     z-index: 999;
 }
 
+
 .replay-content {
-    background: white;
-    padding: 2rem;
-    border-radius: 5px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  background: #fff;
+  border-radius: 16px;
+  padding: 5rem;
+  max-width: 500px;
+  margin: 40px auto;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  animation: popIn 0.5s ease-in-out;
+  font-family: Arial, sans-serif;
+}
+
+.replay-content h2 {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.replay-content p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.replay-buttons {
+  display: flex;
+  justify-content: center;
 }
 
 .replay-buttons button {
-    margin-top: 1rem;
-    padding: 0.8rem 1.2rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 8px;
-    background: #4CAF50;
-    color: white;
-    cursor: pointer;
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .replay-buttons button:hover {
-    background: #45a049;
+  background: #2980b9;
+  transform: scale(1.05);
 }
+
+/* Animation */
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 
 header {
     position: absolute;
@@ -123,48 +160,6 @@ header {
     box-shadow: 4px 4px black;
 }
 
-#rulesModal {
-margin: auto;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    max-width: 600px;
-}
-
-#rulesModal h2 {
-    text-align: center;
-    color: #333;
-}
-
-#rulesModal h3 {
-    color: #555;
-}
-
-#rulesModal ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-#rulesModal li {
-    margin-bottom: 15px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-}
-
-#rulesModal button {
-    display: block;
-    margin: 20px auto 0;
-    padding: 10px 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #ddd;
-}
-
-#rulesModal::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
-}
 
 /* power ups */
 
@@ -199,4 +194,61 @@ margin: auto;
 
 #black-shield:hover, #white-shield:hover, #black-skip:hover, #white-skip:hover, #white-nuke:hover, #black-nuke:hover {
     box-shadow: 4px 4px black;
+}
+
+#chat {
+    /* position: absolute; */
+    background-color: red;
+    width: 250px;
+    right: 0;
+    height: 484px;
+    background: #1e1e1e;
+    padding: 10px;
+    overflow-y: scroll;
+    font-family: Arial, sans-serif;
+}
+
+/* Common message style */
+.message {
+  margin: 6px 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+  animation: fadeIn 0.3s ease-in;
+}
+
+/* Types of messages */
+.message.chat {
+  background: #2c2c2c;
+  color: #ffffff;
+}
+
+.message.alert {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.message.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+.message.capture {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.message.power {
+    background: #81df81;
+    color: #000000;
+    border: 1px solid #81df81;
+}
+
+
+/* Smooth appearance */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }

@@ -52,47 +52,147 @@ export function createBoard() {
 }
 
 export function createRule() {
-    
-    // rule dialog
-    const rule = document.createElement('dialog')
-    rule.setAttribute('id', 'rulesModal')
-    rule.innerHTML = `
-            <h2>Chess Rules</h2>
-            <ul>
-                <li>
-                    <h3>Objective</h3>
-                    <p>The goal is to **checkmate** the opponent's king. That's when their king is under attack and has no safe place to move. The game ends when a player is checkmated or they resign.</p>
-                </li>
-                <li>
-                    <h3>The Board</h3>
-                    <p>The game is played on an 8x8 board with alternating light and dark squares.</p>
-                </li>
-                <li>
-                    <h3>Piece Movements</h3>
-                    <ul>
-                        <li>**King**: Moves one square in any direction.</li>
-                        <li>**Queen**: Moves any number of squares horizontally, vertically, or diagonally.</li>
-                        <li>**Rook**: Moves any number of squares horizontally or vertically.</li>
-                        <li>**Bishop**: Moves any number of squares diagonally.</li>
-                        <li>**Knight**: Moves in an "L" shape, jumping over other pieces.</li>
-                        <li>**Pawn**: Moves one square forward. On its first move, it can go two squares. Pawns capture diagonally one square forward. When a pawn reaches the other end, it becomes a queen.</li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Game-Changing Cards</h3>
-                    <p>Each player gets 3 special cards to use once during the game.</p>
-                    <ul>
-                        <li>**The Teleporter**: Move any of your pieces to any empty square.</li>
-                        <li>**The Shield**: Protects one of your pieces for a full turn, making it invincible.</li>
-                        <li>**The Destroyer**: Instantly remove any of your opponent's pawns from the board.</li>
-                    </ul>
-                </li>
-            </ul>
-            <button onclick="document.getElementById('rulesModal').close()">Close</button>
-            `
-    document.body.appendChild(rule)
+  // Create dialog
+  const rule = document.createElement('dialog');
+  rule.setAttribute('id', 'rulesModal');
 
-    document.getElementById('rules').addEventListener("click", () => {
-        document.getElementById('rulesModal').showModal();
-    })
+  // Add content
+  rule.innerHTML = `
+    <div class="rules-content">
+      <button class="close-btn" onclick="document.getElementById('rulesModal').close()">✖</button>
+      <h2>♟️ Chess Rules</h2>
+      <ul>
+        <li>
+          <h3>🎯 Objective</h3>
+          <p>The goal is to <strong>checkmate</strong> your opponent’s king — when the king is under attack and has no legal move left. The game ends when a player is checkmated or has no legal moves.</p>
+        </li>
+        <li>
+          <h3>🪧 The Board</h3>
+          <p>Played on an <strong>8×8 grid</strong> with alternating light and dark squares.</p>
+        </li>
+        <li>
+          <h3>♔ Piece Movements</h3>
+          <ul>
+            <li><strong>King</strong>: One square in any direction.</li>
+            <li><strong>Queen</strong>: Any number of squares in any direction.</li>
+            <li><strong>Rook</strong>: Any number of squares horizontally or vertically.</li>
+            <li><strong>Bishop</strong>: Any number of squares diagonally.</li>
+            <li><strong>Knight</strong>: “L” shape, jumping over pieces.</li>
+            <li><strong>Pawn</strong>: One square forward (two on its first move). Captures diagonally. No Promotion to queen when reaching the opposite side.</li>
+            <li><em>Note</em>: Some special moves like castling are disabled.</li>
+          </ul>
+        </li>
+        <li>
+          <h3>🃏 Game-Changing Cards</h3>
+          <p>Each player gets <strong>3 special cards</strong> to use once during the game:</p>
+          <ul>
+            <li><strong>The Skip</strong>: Force your opponent to skip their turn.</li>
+            <li><strong>The Shield</strong>: Make your pieces (any) invincible for a turn.</li>
+            <li><strong>The Nuke</strong>: Instantly remove one of your opponent’s pawns.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  `;
+
+  // Append to body
+  document.body.appendChild(rule);
+
+  // Add CSS styles
+  const style = document.createElement("style");
+  style.textContent = `
+    #rulesModal {
+      border: none;
+      padding: 0;
+      background: transparent;
+      margin: auto;
+    }
+
+    .rules-content {
+      background: #fff;
+
+      padding: 24px 28px;
+      max-width: 650px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      font-family: Arial, sans-serif;
+      position: relative;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .rules-content h2 {
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    .rules-content h3 {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+      color: #34495e;
+    }
+
+    .rules-content ul {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 16px;
+    }
+
+    .rules-content ul li {
+      margin-bottom: 14px;
+      padding-left: 10px;
+      border-left: 3px solid #3498db;
+    }
+
+    .rules-content ul ul {
+      margin-top: 8px;
+      padding-left: 20px;
+    }
+
+    .rules-content ul ul li {
+      border-left: none;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .rules-content p {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: #444;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #e74c3c;
+      border: none;
+      color: #fff;
+      font-size: 1.1rem;
+      padding: 6px 10px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .close-btn:hover {
+      background: #c0392b;
+      transform: scale(1.1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Open on button click
+  document.getElementById('rules').addEventListener("click", () => {
+    document.getElementById('rulesModal').showModal();
+  });
 }

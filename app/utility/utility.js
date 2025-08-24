@@ -2,11 +2,18 @@ import { isKingInCheck, isCheckmate, isKingCaptured  } from "./check.js";
 import Replay from "./winner.js";
 import Power from './power.js';
 import { PlaySound } from "./sound.js";
+import { Add } from "./message.js";
+
+Add({type: 'Alert', message: 'Game begin ❤️'})
+
 
 const P = new Power();
 
 let selected = null;
 let Turn = false; // false = 0 = white and true = 1 = black
+
+Add({type: 'Alert',message: 'Ladies first white 👱‍♀️' }); // turn
+
 
 function select(img) {
     if (!img) {
@@ -33,6 +40,7 @@ function select(img) {
 }
 
 export function getSquare(e) {
+
     if(e.target.alt == 'pawn' && (P.activenukeblack || P.activenukewhite)) {
         if(e.target.dataset.color == 'black' && P.activenukewhite) {
             const targetImg = e.target
@@ -51,7 +59,7 @@ export function getSquare(e) {
                 }, 500)
                 P.expireNuke('white')
             };
-            console.log(`White nuked blacked pawn at ${e.target.dataset.name}`)
+            Add({type: 'Capture', message: `White nuked 💥 blacked pawn at ${e.target.dataset.name}`})
             return;
 
         }else if(e.target.dataset.color == 'white' && P.activenukeblack) {
@@ -71,7 +79,7 @@ export function getSquare(e) {
                 }, 500)
                 P.expireNuke('black')
             }
-            console.log(`Black nuked white pawn at ${e.target.dataset.name}`)
+            Add({type: 'Capture', message: `Black nuked 💥 white pawn at ${e.target.dataset.name}`})
             return;
         }
     }
@@ -90,7 +98,6 @@ export function getSquare(e) {
         }
 
 
-    // console.log(Turn); // turn
 }
 
 function getAvailableSquares(img) {
@@ -147,6 +154,8 @@ function moveSelectedPiece(e) {
             return;
         }
         targetImg.remove()
+        Add({type: 'capture', message: `${selected.color}-${selected.type} captured ${targetImg.dataset.color}-${targetImg.alt} at ${targetImg.dataset.name}`});
+
     };
 
     // move piece
@@ -156,7 +165,7 @@ function moveSelectedPiece(e) {
     square.appendChild(selectedImg);
     
 
-    console.log(`Moved ${selected.type} from ${selected.name} to ${square.dataset.name}`);
+    Add({type: 'chat',message: `Moved ${selected.color}-${selected.type} from ${selected.name} to ${square.dataset.name}`});
     selectedImg.dataset.name = square.dataset.name
 
     selected.color == 'black' ? P.expireShield('white') : P.expireShield('black');
@@ -171,14 +180,14 @@ function moveSelectedPiece(e) {
     const { inCheck, attackers } = isKingInCheck(currentColor);
 
     if (inCheck) {
-        console.log(`${currentColor} king is in CHECK by:`);
-        console.log(attackers)
+        Add({type: 'Alert', message: `${currentColor} king is in CHECK by:`});
+        // console.log(attackers)
         attackers.forEach(a => {
-            console.log(`- ${a.type} from ${a.name}`);
+            Add({type: 'Alert', message: `- ${a.type} from ${a.name}`});
         });
 
         if (isCheckmate(currentColor)) {
-            console.log(`CHECKMATE! ${currentColor} has no legal moves.`);
+            Add({type: 'Alert', message: `CHECKMATE! ${currentColor} has no legal moves.`});
             pauseGame(); // remove listeners
             Replay(Turn ? "White" : "Black", restartGame);
         }
@@ -187,7 +196,7 @@ function moveSelectedPiece(e) {
     // === check if a king got captured ===
     const { captured, winner } = isKingCaptured();
     if (captured) {
-        console.log(`GAME OVER — ${winner} wins by capturing the king!`);
+        Add({type: 'Alert', message: `GAME OVER — ${winner} wins by capturing the king!`});
         pauseGame(); // remove listeners
         Replay(winner, restartGame);
     }
@@ -329,7 +338,7 @@ blackshield.addEventListener('click', () => {
     P.useShield('black');
     if(P.activeshieldblack) {
         shield.active('black')
-        console.log("Shield Activated for Black")
+        Add({type: 'Power', message: "Shield Activated for Black"})
     }
     
 })
@@ -339,7 +348,7 @@ whiteshield.addEventListener('click', () => {
     P.useShield('white');
     if(P.activeshieldwhite) {
         shield.active('white')
-        console.log("Shield Activated for white")
+        Add({type: 'Power', message: "Shield Activated for white"})
     }
     
 
@@ -373,7 +382,7 @@ blackskip.addEventListener('click', () => {
     P.useSkip('black');
     if(P.activeskipblack) {
         skip.active('black')
-        console.log("skip Activated for Black i.e white turn will be skipped")
+        Add({type: 'Power', message: "skip Activated for Black i.e white turn will be skipped"})
     }
     
 })
@@ -383,7 +392,7 @@ whiteskip.addEventListener('click', () => {
     P.useSkip('white');
     if(P.activeskipwhite) {
         skip.active('white')
-        console.log("skip Activated for white i.e black turn will be skipped")
+        Add({type: 'Power', message: "skip Activated for white i.e black turn will be skipped"})
     }
     
 
@@ -417,7 +426,7 @@ blacknuke.addEventListener('click', () => {
     P.useNuke('black')
     if(P.activenukeblack) {
         nuke.active('black');
-        console.log('Black is nuking white')
+        Add({type: 'Power', message: 'Black is nuking white'})
     }
 })
 const whitenuke = document.getElementById('white-nuke')
@@ -425,7 +434,7 @@ whitenuke.addEventListener('click', () => {
     P.useNuke('white')
     if(P.activenukewhite) {
         nuke.active('white');
-        console.log('white is nuking black')
+        Add({type: 'Power', message: 'white is nuking black'})
     }
 })
 
